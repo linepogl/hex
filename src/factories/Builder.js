@@ -24,7 +24,6 @@ class BuilderFactory extends Factory {
 
 	getTitle() { return 'Building ' + this.target.getTitle(); }
 	getPercentage() { return this.countBalls / this.target.getRequiredBallsToBuild(); }
-	getInflowCapacity() { return 1000; }
 	getOutflowCapacity() { return 0; }
 
 	fillSvgElement(g) {
@@ -51,7 +50,7 @@ class BuilderFactory extends Factory {
 
 	draw() {
 		super.draw();
-		this.svgElement.find('.progress').clipper().transform({ scaleX: this.getPercentage(), origin: 'left' });
+		this.svgElement.find('.progress').clipper().animate({ duration: game.animationDuration }).transform({ scaleX: this.getPercentage(), origin: 'left' });
 	}
 
 	fillMenu() {
@@ -73,7 +72,6 @@ class BuilderFactory extends Factory {
 		if (this.countBalls === this.target.getRequiredBallsToBuild()) {
 			this.erase();
 			this.hex.factory = this.target;
-			this.hex.countInflow = this.target.getInflowCapacity();
 			this.hex.countOutflow = this.target.getOutflowCapacity();
 		}
 	}

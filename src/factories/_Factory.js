@@ -38,7 +38,6 @@ class Factory {
 	getDirection() { return 1; }
 	getRequiredBallsToBuild() { return 0; }
 	getTitle() { return 'Factory' }
-	getInflowCapacity() { return 0; }
 	getOutflowCapacity() { return 0; }
 
 

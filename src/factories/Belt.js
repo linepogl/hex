@@ -1,10 +1,9 @@
 'use strict';
 
 class BeltFactory extends Factory {
-	constructor(hex, direction = 1, inflow = 1, outflow = 1) {
+	constructor(hex, direction = 1, outflow = 1) {
 		super(hex);
 		this.direction = direction;
-		this.inflow = inflow;
 		this.outflow = outflow;
 	}
 
@@ -12,7 +11,6 @@ class BeltFactory extends Factory {
 		return {
 			...super.dump(),
 			direction: this.direction,
-			inflow: this.inflow,
 			outflow: this.outflow
 		};
 	}
@@ -21,14 +19,12 @@ class BeltFactory extends Factory {
 		let x;
 		const direction = [0, 1, 2, 3, 4, 5].includes(x = parseInt(json.direction)) ? x : 1;
 		const outflow = Number.isInteger(x = parseInt(json.outflow)) ? Math.max(1, x) : 1;
-		const inflow = Number.isInteger(x = parseInt(json.inflow)) ? Math.max(1, x) : 1;
-		return new BeltFactory(hex, direction, inflow, outflow)
+		return new BeltFactory(hex, direction, outflow)
 	}
 
 	getTitle() { return 'Belt'; }
-	getRequiredBallsToBuild() { return Math.pow(10, this.inflow) + Math.pow(10, this.outflow); }
+	getRequiredBallsToBuild() { return Math.pow(10, this.outflow); }
 	getDirection() { return this.direction; }
-	getInflowCapacity() { return this.inflow; }
 	getOutflowCapacity() { return this.outflow; }
 
 	fillSvgElement(g) {
@@ -77,7 +73,7 @@ class BeltFactory extends Factory {
 		b.center(X0 + 250, 60);
 		b.click(() => this.onDestroy());
 
-		let f = new BeltFactory(this.hex, this.direction, this.inflow + 1, this.outflow + 1);
+		let f = new BeltFactory(this.hex, this.direction, this.outflow + 1);
 		b = svgMenuLayer.group();
 		b.rect(100, 60).radius(4).fill('#ffffff').stroke('#434a54');
 		b.text('Upgrade').center(50, 20);

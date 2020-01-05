@@ -4,7 +4,6 @@ class EmptyFactory extends Factory {
 	constructor(hex) { super(hex); }
 	getTitle() { return 'Empty space'; }
 
-	getInflowCapacity() { return 0; }
 	getOutflowCapacity() { return 0; }
 	couldAcceptBall(ball) { return false; }
 	isSaturated() { return true; }

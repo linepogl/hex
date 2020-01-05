@@ -29,6 +29,7 @@ class Game {
 	}
 
 	get animationDuration() { return this.delay * 0.8; }
+	get animationOptions() { return { duration: this.animationDuration }; }
 
 	togglePaused() {
 		this.isPaused = !this.isPaused;

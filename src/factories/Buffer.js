@@ -1,13 +1,12 @@
 'use strict';
 
 class BufferFactory extends Factory {
-	constructor(hex, direction = 1, capacity = 10, inflow = 1, outflow = 1) {
+	constructor(hex, direction = 1, capacity = 10, outflow = 1) {
 		super(hex);
 		this.direction = direction;
 		this.capacity = capacity;
 		this.ballsInBuffer = [];
 		this.outflow = outflow;
-		this.inflow = inflow;
 	}
 
 	dump() {
@@ -15,7 +14,6 @@ class BufferFactory extends Factory {
 			...super.dump(),
 			direction: this.direction,
 			capacity: this.capacity,
-			inflow: this.inflow,
 			outflow: this.outflow,
 			ballsInBuffer: this.ballsInBuffer.map(x => x.dump())
 		};
@@ -26,16 +24,14 @@ class BufferFactory extends Factory {
 		const direction = [0, 1, 2, 3, 4, 5].includes(x = parseInt(json.direction)) ? x : 1;
 		const capacity = Number.isInteger(x = parseInt(json.capacity)) ? Math.max(0, x) : 10;
 		const outflow = Number.isInteger(x = parseInt(json.outflow)) ? Math.max(1, x) : 1;
-		const inflow = Number.isInteger(x = parseInt(json.inflow)) ? Math.max(1, x) : 1;
-		const r = new BufferFactory(hex, direction, capacity, inflow, outflow);
+		const r = new BufferFactory(hex, direction, capacity, outflow);
 		r.ballsInBuffer = (json.ballsInBuffer || []).map(j => Ball.from(hex, j));
 		return r;
 	}
 
 	getTitle() { return 'Buffer'; }
-	getRequiredBallsToBuild() { return Math.pow(this.capacity, 2) + Math.pow(10, this.inflow) + Math.pow(10, this.outflow); }
+	getRequiredBallsToBuild() { return Math.floor(Math.pow(this.capacity, 1.7)) + Math.pow(10, this.outflow); }
 	getDirection() { return this.direction; }
-	getInflowCapacity() { return this.inflow; }
 	getOutflowCapacity() { return this.outflow; }
 
 	fillSvgElement(g) {
@@ -98,20 +94,26 @@ class BufferFactory extends Factory {
 		b.center(X0 + 250, 60);
 		b.click(() => this.onDestroy());
 
-		f = new BufferFactory(this.hex, this.direction, this.capacity, this.inflow + 1, this.outflow + 1);
-		b = svgMenuLayer.group();
-		b.rect(100, 60).radius(4).fill('#ffffff').stroke('#434a54');
-		b.text('Upgrade').center(50, 20);
-		b.text('' + f.getRequiredBallsToBuild()).center(50, 40);
-		b.center(X0 + 400, 60);
-		b.click(() => this.onBuild(f));
+		{
+			const f = new BufferFactory(this.hex, this.direction, this.capacity, this.outflow + 1);
+			f.ballsInBuffer = this.ballsInBuffer
+			b = svgMenuLayer.group();
+			b.rect(100, 60).radius(4).fill('#ffffff').stroke('#434a54');
+			b.text('Upgrade').center(50, 20);
+			b.text('' + f.getRequiredBallsToBuild()).center(50, 40);
+			b.center(X0 + 400, 60);
+			b.click(() => this.onBuild(f));
+		}
 
-		f = new BufferFactory(this.hex, this.direction, this.capacity * 2, this.inflow, this.outflow);
-		b = svgMenuLayer.group();
-		b.rect(100, 60).radius(4).fill('#ffffff').stroke('#434a54');
-		b.text('Increase capacity').center(50, 20);
-		b.text('' + f.getRequiredBallsToBuild()).center(50, 40);
-		b.center(X0 + 400, 120);
-		b.click(() => this.onBuild(f));
+		{
+			const f = new BufferFactory(this.hex, this.direction, this.capacity * 2, this.outflow);
+			f.ballsInBuffer = this.ballsInBuffer
+			b = svgMenuLayer.group();
+			b.rect(100, 60).radius(4).fill('#ffffff').stroke('#434a54');
+			b.text('Increase capacity').center(50, 20);
+			b.text('' + f.getRequiredBallsToBuild()).center(50, 40);
+			b.center(X0 + 400, 120);
+			b.click(() => this.onBuild(f));
+		}
 	}
 }

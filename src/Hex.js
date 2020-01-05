@@ -18,7 +18,6 @@ class Hex {
 		this.working = false;
 		this.ballsToBeAbsorbed = [];
 		this.countOutflow = 0;
-		this.countInflow = 0;
 		this.changed = false;
 	}
 
@@ -92,7 +91,6 @@ class Hex {
 	////////////////////////////////////////////////////////////
 
 	prepareTick() {
-		this.countInflow = 0;
 		this.countOutflow = 0;
 	}
 
@@ -105,7 +103,7 @@ class Hex {
 		}
 	}
 
-	detectCycles(step) {
+	detectCycles() {
 		if (this.isInCycle !== null) return null;
 		if (this.working) return this; // we have found the node that closes the circle!
 		this.working = true;
@@ -122,25 +120,21 @@ class Hex {
 		return circleNode === this ? null : circleNode; // we should not return the node that closes the circle the second time.
 	}
 
-	resolveMoves(step) {
+	resolveMoves() {
 		if (this.isResolved) return true;
-		if (this.waitingForHexAtDirection !== null) return false;
+		if (this.waitingForHexAtDirection !== null && this.factory.isSaturated()) return false;
 		if (this.forcedIncomingDirectionDueToCycles !== null) {
 			this.acceptIncomingBall(this.forcedIncomingDirectionDueToCycles);
 			this.forcedIncomingBallDueToCycles = null;
 		}
-		else if (!this.factory.isSaturated()) {
-			for (let i = 0; i < 6; i++) {
-				const direction = this.incomingBallsRoundRobin;
+		else {
+			for (let i = 0; i < 6 && !this.factory.isSaturated(); i++) {
+				this.acceptIncomingBall(this.incomingBallsRoundRobin);
 				this.incomingBallsRoundRobin = (this.incomingBallsRoundRobin + 1) % 6;
-				if (this.hasIncomingBall[direction]) {
-					this.acceptIncomingBall(direction);
-					break;
-				}
 			}
 		}
 		this.rejectIncomingBalls();
-		this.factory.onAfterResolvingMoves(step);
+		this.factory.onAfterResolvingMoves();
 		this.isResolved = true;
 		return true;
 	}
@@ -156,7 +150,6 @@ class Hex {
 		if (this.balls[0].hasMoved) return false;
 		const hex = this.getLinkedHex(direction);
 		if (hex === null) return false;
-		if (hex.countInflow >= hex.factory.inflowCapacity) return false;
 		if (!hex.factory.couldAcceptBall(this.balls[0])) return false;
 		hex.hasIncomingBall[this.getOppositeDirection(direction)] = true;
 		this.waitingForHexAtDirection = direction;
@@ -182,7 +175,7 @@ class Hex {
 	ejectOutgoingBall() {
 		if (this.balls.length === 0) return null;
 		const ball = this.balls[0];
-		this.coutOutflow++;
+		this.countOutflow++;
 		this.balls.shift();
 		this.waitingForHexAtDirection = null;
 		this.changed = true;
@@ -193,7 +186,6 @@ class Hex {
 		if (ball === null) return null;
 		ball.moveTo(this);
 		this.balls.push(ball);
-		this.countInflow++;
 		this.changed = true;
 		return ball;
 	}
