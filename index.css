@@ -1,0 +1,20 @@
+
+
+
+
+
+#menu { margin:10px; background:#ffffff; padding:10px; border-radius:3px; }
+#menu h1 { font:bold 14px/18px sans-serif; }
+
+
+.factory .factory-border { fill: #ffffff; }
+.factory .factory-background { fill: #e6e9ed; }
+.factory.selected .factory-background { fill: #ffce54; }
+
+.factory-title { font: bold 20px/20px sans-serif; } 
+
+
+
+
+.ball.type-0 .ball-background { fill: #5d9cec; } 
+.ball.type-0 .ball-border { fill: #4a89dc; } 

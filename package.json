@@ -1,0 +1,11 @@
+{
+  "name": "hex",
+  "version": "0.0.0",
+  "description": "hex",
+  "author": {
+    "name": ""
+  },
+  "devDependencies": {
+    "mocha": "^6.2.2"
+  }
+}
