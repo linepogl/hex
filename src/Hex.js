@@ -124,8 +124,10 @@ class Hex {
 		if (this.isResolved) return true;
 		if (this.waitingForHexAtDirection !== null && this.factory.isSaturated()) return false;
 		if (this.forcedIncomingDirectionDueToCycles !== null) {
-			this.acceptIncomingBall(this.forcedIncomingDirectionDueToCycles);
-			this.forcedIncomingBallDueToCycles = null;
+			if (this.countOutflow < this.factory.getOutflowCapacity() || !this.factory.isSaturated()) {
+				this.acceptIncomingBall(this.forcedIncomingDirectionDueToCycles);
+				this.forcedIncomingDirectionDueToCycles = null;
+			}
 		}
 		else {
 			for (let i = 0; i < 6 && !this.factory.isSaturated(); i++) {
@@ -133,10 +135,12 @@ class Hex {
 				this.incomingBallsRoundRobin = (this.incomingBallsRoundRobin + 1) % 6;
 			}
 		}
-		this.rejectIncomingBalls();
+		if (this.waitingForHexAtDirection === null) {
+			this.rejectIncomingBalls();
+			this.isResolved = true;
+		}
 		this.factory.onAfterResolvingMoves();
-		this.isResolved = true;
-		return true;
+		return this.isResolved;
 	}
 
 	//
@@ -194,4 +198,3 @@ class Hex {
 		this.ballsToBeAbsorbed.push(ball);
 	}
 }
-

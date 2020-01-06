@@ -19,14 +19,18 @@
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
   <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
   <ItemGroup>
+    <Content Include=".gitignore" />
     <Content Include="index.html" />
     <Content Include="index.css" />
+    <Content Include="package-lock.json" />
     <Content Include="package.json" />
     <Content Include="index.js" />
     <Content Include="lib\jquery.js" />
     <Content Include="lib\svg.js" />
+    <Content Include="src\_.js" />
     <Content Include="src\Ball.js" />
     <Content Include="src\Board.js" />
+    <Content Include="src\factories\Mixer.js" />
     <Content Include="src\Game.js" />
     <Content Include="src\Hex.js" />
     <Content Include="src\factories\Belt.js" />
@@ -35,6 +39,10 @@
     <Content Include="src\factories\Empty.js" />
     <Content Include="src\factories\Generator.js" />
     <Content Include="src\factories\_Factory.js" />
+    <Content Include="tst\Belt.test.js">
+      <SubType>Code</SubType>
+      <TestFramework>Mocha</TestFramework>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="lib" />

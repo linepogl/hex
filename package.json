@@ -1,11 +1,20 @@
 {
-  "name": "hex",
-  "version": "0.0.0",
-  "description": "hex",
-  "author": {
-    "name": ""
-  },
-  "devDependencies": {
-    "mocha": "^6.2.2"
-  }
+	"name": "hex",
+	"version": "0.0.0",
+	"description": "hex",
+	"author": {
+		"name": ""
+	},
+	"scripts": {
+		"build": "cat src/Ball.js src/Board.js src/Game.js src/Hex.js src/factories/_Factory.js src/factories/Belt.js src/factories/Buffer.js src/factories/Builder.js src/factories/Empty.js src/factories/Generator.js src/factories/Mixer.js src/_.js > res/bundle.js"
+	},
+	"devDependencies": {
+		"expect.js": "^0.3.1",
+		"mocha": "^6.2.2"
+	},
+	"-vs-binding": {
+		"AfterBuild": [
+			"build"
+		]
+	}
 }

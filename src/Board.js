@@ -76,6 +76,8 @@ class Board {
 		};
 	}
 
+	get ballTypes() { return this.hexes.map(x => x.balls.map(x => x.type)); }
+
 	draw() {
 		this.hexes.forEach(x => x.draw());
 	}
@@ -98,4 +100,3 @@ class Board {
 		} 
 	}
 }
-
