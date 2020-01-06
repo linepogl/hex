@@ -6,6 +6,7 @@
 		"name": ""
 	},
 	"scripts": {
+		"start": "node server.js",
 		"build": "cat src/Ball.js src/Board.js src/Game.js src/Hex.js src/factories/_Factory.js src/factories/Belt.js src/factories/Buffer.js src/factories/Builder.js src/factories/Empty.js src/factories/Generator.js src/factories/Mixer.js src/_.js > res/bundle.js"
 	},
 	"devDependencies": {
@@ -16,5 +17,8 @@
 		"AfterBuild": [
 			"build"
 		]
+	},
+	"dependencies": {
+		"express": "^4.17.1"
 	}
 }
